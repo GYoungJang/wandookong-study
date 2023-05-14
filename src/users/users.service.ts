@@ -1,14 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
+import { ResponseUserDto } from './dto/response-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(UserRepository) private usersRepository: UserRepository,
-  ) {}
+  constructor(private usersRepository: UserRepository) {}
 
   async signUp(body: CreateUserDto) {
     const { email, password, nickname } = body;
@@ -28,8 +26,7 @@ export class UsersService {
 
     await this.usersRepository.save(user);
 
-    // TODO: 패스워드는 반환 값에서 빼기
-    return user;
+    return new ResponseUserDto(user);
   }
 
   async findEmail(email: string) {
