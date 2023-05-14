@@ -5,13 +5,11 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
-export class UserRepository extends Repository<User> {
+export class UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
-  ) {
-    super(repository.target, repository.manager, repository.queryRunner);
-  }
+  ) {}
 
   async checkEmail(email: string): Promise<boolean> {
     const result = await this.repository.findOne({ where: { email } });
@@ -24,6 +22,14 @@ export class UserRepository extends Repository<User> {
   }
 
   async findEmail(email: string) {
-    return await this.repository.findOne({ where: { email } });
+    return await this.repository.findOneBy({ email });
+  }
+
+  async save(user) {
+    return await this.repository.save(user);
+  }
+
+  async validateUser(email, nickname) {
+    return await this.repository.findOne({ where: { email, nickname } });
   }
 }

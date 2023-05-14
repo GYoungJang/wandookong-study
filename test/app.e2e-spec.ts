@@ -15,6 +15,31 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
+  describe('/users', () => {
+    it('/signup (POST)', () => {
+      return request(app.getHttpServer())
+        .post('/users/signup')
+        .send({
+          email: 'test3@gmail.com',
+          nickname: 'test3',
+          password: 'test3',
+        })
+        .expect(201);
+    });
+  });
+
+  describe('auth', () => {
+    it('/login (POST)', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: 'test3@gmail.com',
+          password: 'test3',
+        })
+        .expect(201);
+    });
+  });
+
   it('/ (GET)', () => {
     return request(app.getHttpServer())
       .get('/')
